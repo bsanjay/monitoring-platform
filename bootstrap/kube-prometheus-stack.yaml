@@ -1,0 +1,79 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+
+spec:
+  project: default
+
+  source:
+    repoURL: https://prometheus-community.github.io/helm-charts
+    chart: kube-prometheus-stack
+    targetRevision: 80.0.0
+
+    helm:
+      values: |
+        grafana:
+          enabled: true
+
+          adminPassword: admin123
+
+          persistence:
+            enabled: true
+            storageClassName: longhorn
+            size: 10Gi
+
+          sidecar:
+            dashboards:
+              enabled: true
+              searchNamespace: ALL
+
+            datasources:
+              enabled: true
+
+        alertmanager:
+          enabled: true
+
+        prometheus:
+          enabled: true
+
+          prometheusSpec:
+
+            retention: 2d
+
+            serviceMonitorSelector: {}
+            serviceMonitorNamespaceSelector: {}
+
+            podMonitorSelector: {}
+            podMonitorNamespaceSelector: {}
+
+            ruleSelector: {}
+            ruleNamespaceSelector: {}
+
+            scrapeConfigSelector: {}
+            scrapeConfigNamespaceSelector: {}
+
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  storageClassName: longhorn
+
+                  accessModes:
+                    - ReadWriteOnce
+
+                  resources:
+                    requests:
+                      storage: 10Gi
+
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: monitoring
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+
+    syncOptions:
+      - CreateNamespace=true
