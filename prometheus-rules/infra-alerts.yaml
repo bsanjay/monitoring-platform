@@ -3,7 +3,7 @@ kind: PrometheusRule
 
 metadata:
   name: infra-alerts
-
+  namespace: monitoring
 spec:
   groups:
   - name: infra
