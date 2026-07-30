@@ -1,0 +1,23 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+
+metadata:
+  name: infra-alerts
+
+spec:
+  groups:
+  - name: infra
+
+    rules:
+
+    - alert: NodeDown
+
+      expr: up == 0
+
+      for: 5m
+
+      labels:
+        severity: critical
+
+      annotations:
+        summary: Node is down

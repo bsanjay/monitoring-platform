@@ -1,0 +1,79 @@
+grafana:
+  enabled: true
+
+  adminPassword: admin123
+
+  persistence:
+    enabled: true
+    storageClassName: longhorn
+    size: 10Gi
+
+  sidecar:
+    dashboards:
+      enabled: true
+      searchNamespace: ALL
+
+    datasources:
+      enabled: true
+
+alertmanager:
+  enabled: true
+
+  alertmanagerSpec:
+    replicas: 1
+
+prometheus:
+  enabled: true
+
+  prometheusSpec:
+
+    retention: 2d
+
+    replicas: 1
+
+    ##################################################
+    # Cross Namespace Discovery (Phase 10)
+    ##################################################
+
+    serviceMonitorSelector: {}
+
+    serviceMonitorNamespaceSelector: {}
+
+    podMonitorSelector: {}
+
+    podMonitorNamespaceSelector: {}
+
+    ruleSelector: {}
+
+    ruleNamespaceSelector: {}
+
+    ##################################################
+    # ScrapeConfig Discovery (Phase 11)
+    ##################################################
+
+    scrapeConfigSelector: {}
+
+    scrapeConfigNamespaceSelector: {}
+
+    ##################################################
+    # External Labels
+    ##################################################
+
+    externalLabels:
+      cluster: prod
+
+    ##################################################
+    # Storage
+    ##################################################
+
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: longhorn
+
+          accessModes:
+            - ReadWriteOnce
+
+          resources:
+            requests:
+              storage: 10Gi

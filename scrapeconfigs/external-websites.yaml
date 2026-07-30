@@ -1,0 +1,18 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+
+metadata:
+  name: external-websites
+
+spec:
+
+  metricsPath: /probe
+
+  params:
+    module:
+      - http_2xx
+
+  staticConfigs:
+  - targets:
+    - https://google.com
+    - https://moogle.com

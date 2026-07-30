@@ -1,0 +1,13 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: ScrapeConfig
+
+metadata:
+  name: postgres
+
+spec:
+
+  staticConfigs:
+  - targets:
+    - postgres-exporter.databases.svc:9187
+
+  scrapeInterval: 30s
