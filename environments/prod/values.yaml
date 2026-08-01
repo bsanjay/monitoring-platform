@@ -4,7 +4,7 @@ grafana:
   adminPassword: admin123
 
   persistence:
-    enabled: true
+    enabled: false
     storageClassName: longhorn
     size: 10Gi
 
@@ -21,6 +21,12 @@ alertmanager:
 
   alertmanagerSpec:
     replicas: 1
+
+prometheusOperator:
+  image:
+    registry: quay.io
+    repository: prometheus-operator/prometheus-operator
+    tag: v0.92.1
 
 prometheus:
   enabled: true
@@ -69,7 +75,7 @@ prometheus:
     storageSpec:
       volumeClaimTemplate:
         spec:
-          storageClassName: longhorn
+          storageClassName: local-path
 
           accessModes:
             - ReadWriteOnce
